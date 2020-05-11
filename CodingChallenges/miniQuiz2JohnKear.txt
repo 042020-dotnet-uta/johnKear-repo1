@@ -1,0 +1,31 @@
+miniQuiz questions
+
+1) In the Defining Requirements step, approval from the customer or market analysts is accomplished using the ______ document.
+	- Software Requirements Solicitation
+	- (CORRECT)Software Requirements Specification
+	- Software Requested Specifications
+	- System Requirements Specification
+
+2) Phases of the Iterative model include which of the following:
+	- (CORRECT)Inception
+	- Embelishment
+	- Conception
+	- Turnover
+
+3) Agile principles state that the primary measure of progress is
+	- face-to-face conversation
+	- continuous attention to technical excellence and good design
+	- (CORRECT)working software
+	- business people and developers working together daily
+	
+4) Which of the following is NOT true about Daily Scrum meetings?
+	- A short (usually limited to 15 minutes) discussion
+	- Is not intended for status reporting
+	- (CORRECT)Is intended as a problem solving discussion
+	- Used to coordinate activities for the following day
+
+5) Which is true about WIP limits in Kanban
+	- Increase work load of developers
+	- (CORRECT)Intended to decrease lead time
+	- Increase the amount of work "nearly done"
+	- Make blockers and bottlenecks invisible
