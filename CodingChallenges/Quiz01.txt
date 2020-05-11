@@ -1,0 +1,31 @@
+Mini-quiz
+
+1) In routing, what does the '?' symbol mean in the statement "{controller=Home}/{action=Index}/{id?}"
+	- what?
+	- (CORRECT)optional
+	- required
+	- not null
+	
+2) When two endpoints match through routing, routing must do which of the following
+	- Choose both endpoints
+	- Choose neither endpoints
+	- Crash the program
+	- (CORRECT)Choose either the best candidate or throw an exception
+	
+3) The [Required] attribute tag provides validation 
+	- Never
+	- Client-side
+	- (CORRECT)Server-side
+	- Middleware pipeline
+	
+4) The Scoped liftime services (AddScoped)
+	- (CORRECT)are created once per client request.
+	- are created each time they're requested from the service container.
+	- are created the first time they're requested.
+	- are best for lightweight, stateless services.
+	
+5) Which of the following is an ASP.NET MVC framework action result:
+	- ViewComplete
+	- (CORRECT)ViewResult
+	- JsonAnswer
+	- FileLocationResult
