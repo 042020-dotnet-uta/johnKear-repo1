@@ -24,6 +24,10 @@ namespace proj1_OnlineStore
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddControllersWithViews();
+			//services.AddRazorPages().AddRazorRuntimeCompilation();
+
+			//services.AddDbContext<MvcAppDbContext>(options => options
+			//	.UseSqlServer(Configuration.GetConnectionString("MvcMovieDbContext")));
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
