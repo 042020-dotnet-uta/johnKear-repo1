@@ -18,10 +18,10 @@ namespace proj1_OnlineStore.Models
 
 		/// <summary>
 		/// Location name is required and may only upper/lowercase letters with a max length of 50
-		/// </summary>
-		[Required(ErrorMessage = "Location name is required")]
+		/// </summary>		
 		[DisplayName("Name")]
 		[RegularExpression(@"^[a-zA-Z''-'/s{1,50}$")]
+		[Required(ErrorMessage = "Location name is required")]
 		public string LocationName { get; set; }
 
 		#endregion

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace proj1_OnlineStore.Models
 {
-	public class OrderDetails
+	public class OrderLineItem
 	{
 		#region Fields
 		[Key]
@@ -16,20 +16,20 @@ namespace proj1_OnlineStore.Models
 		public int OrderDetailsId { get; set; }
 
 		[ForeignKey("OrderId")]
-		public virtual Order OrderId { get; set; }
+		public int OrderId { get; set; }
 
 	
 		[ForeignKey("ProductId")]
-		public virtual Product ProductId { get; set; }
+		public int ProductId { get; set; }
 
-		[Required]
 		[DisplayName("Quantity")]
+		[Required]		
 		public int Qty { get; set; }
 
 		#endregion
 
 		#region Constructors
-		public OrderDetails() { }
+		public OrderLineItem() { }
 		#endregion
 	}
 }

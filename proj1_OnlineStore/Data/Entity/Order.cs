@@ -15,30 +15,26 @@ namespace proj1_OnlineStore.Models
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public int OrderId { get; set; }
 
-		[Required(ErrorMessage = "Must have user id")]
-		[ForeignKey("UserId")]
-		public virtual User UserId { get; set; }
+		[Required(ErrorMessage = "Must have customer id")]
+		[ForeignKey("CustomerId")]
+		public int CustomerId { get; set; }
 
-		private int locationId;
 		[ForeignKey("LocationId")]
-		public int LocationId
-		{
-			get { return locationId; }
-			set { locationId = value; }
-		}
+		public int LocationId { get; set; }
 
-		[Required]
 		[DataType(DataType.DateTime, ErrorMessage = "Invalid date format")]
-		public DateTime Timestamp { get; set; }
+		[Required]
+		public string Timestamp { get; set; }
 
 		[Required]
-		[DataType(DataType.Currency)]
 		[DisplayName("Order Total")]
-		public float? OrderTotal { get; set; }
+		[DataType(DataType.Currency)]
+		[Column(TypeName = "decimal(18,2)")]
+		public decimal OrderTotal { get; set; }
 		#endregion
 
 		#region Constructors
-		public Order() { this.Timestamp = DateTime.Now; }
+		public Order() { this.Timestamp = DateTime.Now.ToString(); }
 		#endregion
 	}
 }

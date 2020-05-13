@@ -9,10 +9,10 @@ namespace proj1_OnlineStore.Data
 {
 	public class OnlineStoreDbContext : DbContext
 	{
-		public DbSet<User> Users { get; set; }
+		public DbSet<Customer> Customers { get; set; }
 		public DbSet<Location> Locations { get; set; }
 		public DbSet<Order> Orders { get; set; }
-		public DbSet<OrderDetails> OrderDetails { get; set; }
+		public DbSet<OrderLineItem> OrderDetails { get; set; }
 		public DbSet<Product> Products { get; set; }		
 
 		public OnlineStoreDbContext() { }
@@ -22,8 +22,9 @@ namespace proj1_OnlineStore.Data
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
+			base.OnModelCreating(modelBuilder);
 			//  User's login must be a unique value
-			modelBuilder.Entity<User>().HasIndex(u => u.Login).IsUnique();
+			modelBuilder.Entity<Customer>().HasIndex(u => u.Login).IsUnique();
 		}
 	}
 }

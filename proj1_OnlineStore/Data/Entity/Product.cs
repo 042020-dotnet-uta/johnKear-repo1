@@ -18,7 +18,7 @@ namespace proj1_OnlineStore.Models
 		public int ProductId { get; set; }
 
 		[ForeignKey("LocationId")]
-		public virtual Location LocationId { get; set; }
+		public int LocationId { get; set; }
 
 		[Required]
 		[NotNull]
@@ -26,15 +26,16 @@ namespace proj1_OnlineStore.Models
 
 		[Required]
 		[DataType(DataType.Currency)]
-		public float? UnitPrice { get; set; }
+		[Column(TypeName = "decimal(18,2)")]
+		public decimal UnitPrice { get; set; }
 
 		/// <summary>
 		/// Quantity should never be less than 0
 		/// </summary>
-		[Required]
-		[NotNull]
 		[Range(0, Int64.MaxValue)]
 		[DisplayName("Quantity")]
+		[Required]
+		[NotNull]		
 		public int Qty { get; set; }
 
 		#endregion
