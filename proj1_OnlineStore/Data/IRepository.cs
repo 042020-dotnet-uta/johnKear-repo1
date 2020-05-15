@@ -51,4 +51,5 @@ namespace proj1_OnlineStore.Data
 		Task<T> GetProductById(int id);
 		Task<IEnumerable<Product>> GetProductsByLocation(Location location);
 	}
+
 }

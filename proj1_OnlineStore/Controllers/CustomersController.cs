@@ -15,8 +15,8 @@ namespace proj1_OnlineStore.Controllers
 {
     public class CustomersController : Controller
     {
-        private ILogger<Customer> _logger;
-        private ICustomerRepository<Customer> _repository;
+        private readonly ILogger<Customer> _logger;
+        private readonly ICustomerRepository<Customer> _repository;
 
         public CustomersController(ICustomerRepository<Customer> customerRepository, ILogger<Customer> logger)
         {
@@ -56,9 +56,9 @@ namespace proj1_OnlineStore.Controllers
         }
         // GET: Customers/Details/5
         [Route("LastName")]
-        public ViewResult GetByLast(string lname)
+        public  ViewResult GetByLast(string lname)
         {
-            var customer = _repository.FindCustomerByLastname(lname);
+            var customer =  _repository.FindCustomerByLastname(lname);
             return View(customer);
         }
 
@@ -141,7 +141,7 @@ namespace proj1_OnlineStore.Controllers
         }
 
         // GET: Customers/Delete/5
-        [Authorize]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> Delete(int? id = 0)
         {
             if (id == null)

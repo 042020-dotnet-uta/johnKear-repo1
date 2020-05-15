@@ -2,13 +2,19 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using proj1_OnlineStore.Data.Repository;
 using proj1_OnlineStore.Models;
 
 namespace proj1_OnlineStore.Controllers
 {
+	[AllowAnonymous]
 	public class HomeController : Controller
 	{
 		private readonly ILogger<HomeController> _logger;
@@ -32,6 +38,13 @@ namespace proj1_OnlineStore.Controllers
 		public IActionResult Error()
 		{
 			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+		}
+
+		[AllowAnonymous]
+		public async Task Logout()
+		{
+			await HttpContext.SignOutAsync(
+				CookieAuthenticationDefaults.AuthenticationScheme);
 		}
 	}
 }

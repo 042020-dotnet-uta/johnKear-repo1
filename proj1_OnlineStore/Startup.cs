@@ -2,17 +2,24 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.CodeAnalysis.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using proj1_OnlineStore.Data;
 using proj1_OnlineStore.Data.Repository;
 using proj1_OnlineStore.Models;
@@ -47,6 +54,22 @@ namespace proj1_OnlineStore
 					logging.ClearProviders();
 					logging.AddConsole();
 				});
+			});
+
+			//  Configure cookie authentication policy
+			services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+				.AddCookie(options =>
+				{
+					options.LoginPath = "/Login/";
+					options.AccessDeniedPath = "/Home/Unathorized/";
+					options.LogoutPath = "/Home/Logout/";
+					options.Cookie.HttpOnly = true;
+					options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+				});
+
+			services.AddMvc(options =>
+			{
+				options.Filters.Add(new AuthorizeFilter(new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build()));
 			});
 
 			//  Add Repositories
@@ -84,6 +107,7 @@ namespace proj1_OnlineStore
 
 			app.UseRouting();
 
+			app.UseCookiePolicy();
 			app.UseAuthentication();
 			app.UseAuthorization();
 
