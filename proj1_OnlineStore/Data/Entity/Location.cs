@@ -17,10 +17,10 @@ namespace proj1_OnlineStore.Models
 		public int LocationId { get; set; }
 
 		/// <summary>
-		/// Location name is required and may only upper/lowercase letters with a max length of 50
+		/// Location name is required and may only upper/lowercase letters with a max length of 25
 		/// </summary>		
 		[DisplayName("Name")]
-		[RegularExpression(@"^[a-zA-Z]''-'/s{1,50}$")]
+		[RegularExpression(@"^[a-zA-Z]{1,25}$")]
 		[Required(ErrorMessage = "Location name is required")]
 		public string LocationName { get; set; }
 

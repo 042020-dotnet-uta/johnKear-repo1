@@ -24,11 +24,13 @@ namespace proj1_OnlineStore.Models
 		/// <summary>
 		/// Login name is required and has a max length of 20 characters
 		/// </summary>
-		[Range(5, 20, ErrorMessage = "{0} must be between {1} and {2}.")]
+		[StringLength(20)]
+		[MinLength(5, ErrorMessage = "{0} name must be a minimum length of {1}")]
 		[Required]
 		public string Login { get; set; }
 
-		[Range(5, 30, ErrorMessage = "{0} must be between {1} and {2}.")]
+		[StringLength(20)]
+		[MinLength(8, ErrorMessage = "{0} must be a length of at least {1}")]
 		[DataType(DataType.Password)]
 		[Required]		
 		public string Password { get; set; }
@@ -37,7 +39,7 @@ namespace proj1_OnlineStore.Models
 		/// First name is required and may only contain upper/lower case letters with a max length of 50
 		/// </summary>
 		[DisplayName("First Name")]
-		[RegularExpression(@"^[a-zA-Z]''-'/s{1,50}$")]
+		[RegularExpression(@"^[a-zA-Z]{1,25}$")]
 		[Required(ErrorMessage = "First name is required")]
 		public string FirstName { get; set; }
 
@@ -46,7 +48,7 @@ namespace proj1_OnlineStore.Models
 		/// </summary>
 		[DisplayName("Last Name")]
 		[Required(ErrorMessage = "Last name is required")]
-		[RegularExpression(@"^[a-zA-Z]''-'/s{1,50}$")]
+		[RegularExpression(@"^[a-zA-Z]{1,25}$")]
 		public string LastName { get; set; }
 
 		/// <summary>
@@ -54,7 +56,10 @@ namespace proj1_OnlineStore.Models
 		/// </summary>
 		[Required(ErrorMessage = "Phone number is required")]
 		[DisplayName("Phone")]
-		[DataType(DataType.PhoneNumber, ErrorMessage = "Must be valid phone format")]
+		[RegularExpression
+			(@"^(\d{3})-(\d{3})-(\d{4})$",
+			ErrorMessage = "Must be of form: 123-123-1234")]
+		[Phone]
 		public string PhoneNumber { get; set; }
 
 		[ForeignKey("LocationId")]
