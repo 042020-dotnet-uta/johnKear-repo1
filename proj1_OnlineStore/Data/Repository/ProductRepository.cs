@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace proj1_OnlineStore.Data.Repository
 {
-	public class ProductRepository : IProductRepository
+	public class ProductRepository : IProductRepository<Product>
 	{
 
 		private OnlineStoreDbContext _context;
@@ -16,12 +16,12 @@ namespace proj1_OnlineStore.Data.Repository
 			this._context = context;
 		}
 
-		Product IProductRepository.GetProductById(int id)
+		public Task<Product> GetProductById(int id)
 		{
 			throw new NotImplementedException();
 		}
 
-		IEnumerable<Product> IProductRepository.GetProductsByLocation(Location location)
+		public Task<IEnumerable<Product>> GetProductsByLocation(Location location)
 		{
 			throw new NotImplementedException();
 		}

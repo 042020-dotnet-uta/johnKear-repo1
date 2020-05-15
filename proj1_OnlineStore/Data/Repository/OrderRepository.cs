@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace proj1_OnlineStore.Data.Repository
 {
-	public class OrderRepository : IOrderRepository
+	public class OrderRepository : IOrderRepository<Order>
 	{
 
 		private OnlineStoreDbContext _context;
@@ -16,22 +16,22 @@ namespace proj1_OnlineStore.Data.Repository
 			this._context = context;
 		}
 
-		IEnumerable<OrderLineItem> IOrderRepository.GetLineItems(Order order)
+		public Task<IEnumerable<OrderLineItem>> GetLineItems(Order order)
 		{
 			throw new NotImplementedException();
 		}
 
-		IEnumerable<Order> IOrderRepository.GetOrderHistory(Customer customer)
+		public Task<IEnumerable<Order>> GetOrderHistory(Customer customer)
 		{
 			throw new NotImplementedException();
 		}
 
-		bool IOrderRepository.RemoveLineItem(OrderLineItem lineItem)
+		public Task<Order> RemoveLineItem(OrderLineItem lineItem)
 		{
 			throw new NotImplementedException();
 		}
 
-		bool IOrderRepository.SetLineItemQuantity(OrderLineItem lineItem, int newQuantity)
+		public Task<Order> SetLineItemQuantity(OrderLineItem lineItem, int newQuantity)
 		{
 			throw new NotImplementedException();
 		}

@@ -13,31 +13,42 @@ namespace proj1_OnlineStore.Data
 	{
 	}
 
-	public interface ICustomerRepository
+	public interface ICustomerRepository<T> : IDisposable
 	{
-		Location GetDefaultLocation(Customer customer);
-		Customer Add(Customer customer);
-		IEnumerable<Order> GetOrderHistory(Customer customer);
-		IEnumerable<Customer> FindCustomerByFirstName(string name);
+		Task<IEnumerable<Customer>>FindCustomerByFirstName(string fname);
+		Task<IEnumerable<Customer>> FindCustomerByLastname(string lname);
+		Task<IEnumerable<Customer>> FindCustomerByFullname(string name);
+		Task<IEnumerable<Order>> GetOrderHistory(Customer customer);
+		Task<Customer> FindCustomerById(int? id);
+		Task<Location> GetDefaultLocation(Customer customer);
+		Task SetDefaultLocation(Customer customer, Location location);
+		Task<Customer> Add(Customer customer);
+		Task Delete(Customer customer);
+		Task<bool> LoginExists(string login);
+		Task<bool> CustomerExists(int id);
+		Task<Customer> GetCustomerByLogin(string login);
+		Task<IEnumerable<Customer>> GetCustomers();
+		Task<Customer> UpdateCustomer(Customer customer);
+		void Save();
 	}
 
-	public interface ILocationRepository
+	public interface ILocationRepository<T>
 	{
-		IEnumerable<Location> GetLocations();
-		IEnumerable<Product> GetInventory(Location location);
+		Task<T> GetLocations();
+		Task<T> GetInventory(Location location);
 	}
 	
-	public interface IOrderRepository
+	public interface IOrderRepository<T>
 	{
-		IEnumerable<Order> GetOrderHistory(Customer customer);
-		IEnumerable<OrderLineItem> GetLineItems(Order order);
-		bool SetLineItemQuantity(OrderLineItem lineItem, int newQuantity);
-		bool RemoveLineItem(OrderLineItem lineItem);
+		Task<IEnumerable<Order>> GetOrderHistory(Customer customer);
+		Task<IEnumerable<OrderLineItem>> GetLineItems(Order order);
+		Task<T> SetLineItemQuantity(OrderLineItem lineItem, int newQuantity);
+		Task<T> RemoveLineItem(OrderLineItem lineItem);
 	}
 
-	public interface IProductRepository
+	public interface IProductRepository<T>
 	{
-		Product GetProductById(int id);
-		IEnumerable<Product> GetProductsByLocation(Location location);
+		Task<T> GetProductById(int id);
+		Task<IEnumerable<Product>> GetProductsByLocation(Location location);
 	}
 }

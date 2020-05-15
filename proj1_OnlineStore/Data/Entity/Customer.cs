@@ -37,7 +37,7 @@ namespace proj1_OnlineStore.Models
 		/// First name is required and may only contain upper/lower case letters with a max length of 50
 		/// </summary>
 		[DisplayName("First Name")]
-		[RegularExpression(@"^[a-zA-Z''-'/s{1,50}$")]
+		[RegularExpression(@"^[a-zA-Z]''-'/s{1,50}$")]
 		[Required(ErrorMessage = "First name is required")]
 		public string FirstName { get; set; }
 
@@ -46,7 +46,7 @@ namespace proj1_OnlineStore.Models
 		/// </summary>
 		[DisplayName("Last Name")]
 		[Required(ErrorMessage = "Last name is required")]
-		[RegularExpression(@"^[a-zA-Z''-'/s{1,50}$")]
+		[RegularExpression(@"^[a-zA-Z]''-'/s{1,50}$")]
 		public string LastName { get; set; }
 
 		/// <summary>

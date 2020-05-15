@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.Operations;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using proj1_OnlineStore.Data;
 using proj1_OnlineStore.Models;
 
@@ -12,20 +15,22 @@ namespace proj1_OnlineStore.Controllers
 {
     public class CustomersController : Controller
     {
-        private readonly OnlineStoreDbContext _context;
+        private ILogger<Customer> _logger;
+        private ICustomerRepository<Customer> _repository;
 
-        public CustomersController(OnlineStoreDbContext context)
+        public CustomersController(ICustomerRepository<Customer> customerRepository, ILogger<Customer> logger)
         {
-            _context = context;
+            this._logger = logger;
+            this._repository = customerRepository;
         }
 
         // GET: Customers
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Customers.ToListAsync());
+            return View(await _repository.GetCustomers());
         }
 
-        // GET: Customers/Details/5
+        // GET: Locations/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,13 +38,27 @@ namespace proj1_OnlineStore.Controllers
                 return NotFound();
             }
 
-            var customer = await _context.Customers
-                .FirstOrDefaultAsync(m => m.CustomerId == id);
+            var customer = await _repository.FindCustomerById(id);
             if (customer == null)
             {
                 return NotFound();
             }
 
+            return View(customer);
+        }
+
+        // GET: Customers/Details/5
+        [Route("Firstname")]
+        public ViewResult GetByFirst(string fname)
+        {
+            var customer = _repository.FindCustomerByFirstName(fname);
+            return View(customer);
+        }
+        // GET: Customers/Details/5
+        [Route("LastName")]
+        public ViewResult GetByLast(string lname)
+        {
+            var customer = _repository.FindCustomerByLastname(lname);
             return View(customer);
         }
 
@@ -56,12 +75,14 @@ namespace proj1_OnlineStore.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CustomerId,Login,Password,FirstName,LastName,PhoneNumber,DefaultLocation")] Customer customer)
         {
+            
             if (ModelState.IsValid)
             {
-                _context.Add(customer);
-                await _context.SaveChangesAsync();
+               await _repository.Add(customer);
+                _repository.Save();
                 return RedirectToAction(nameof(Index));
             }
+          
             return View(customer);
         }
 
@@ -73,7 +94,7 @@ namespace proj1_OnlineStore.Controllers
                 return NotFound();
             }
 
-            var customer = await _context.Customers.FindAsync(id);
+            var customer = await _repository.FindCustomerById(id);
             if (customer == null)
             {
                 return NotFound();
@@ -86,6 +107,7 @@ namespace proj1_OnlineStore.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(int id, [Bind("CustomerId,Login,Password,FirstName,LastName,PhoneNumber,DefaultLocation")] Customer customer)
         {
             if (id != customer.CustomerId)
@@ -97,35 +119,37 @@ namespace proj1_OnlineStore.Controllers
             {
                 try
                 {
-                    _context.Update(customer);
-                    await _context.SaveChangesAsync();
+                    await _repository.UpdateCustomer(customer);
+                    _repository.Save();
+                    return RedirectToAction("Index");
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException e)
                 {
-                    if (!CustomerExists(customer.CustomerId))
+                    bool exists = await CustomerExists(customer.CustomerId);
+                    if (!exists)
                     {
                         return NotFound();
                     }
                     else
                     {
-                        throw;
+                        _logger.LogInformation($"Could not update {customer}. Error: {e.Message}");
+                        ModelState.AddModelError(string.Empty, "Unable to save changes. Try again.");
                     }
-                }
-                return RedirectToAction(nameof(Index));
+                }                
             }
             return View(customer);
         }
 
         // GET: Customers/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        [Authorize]
+        public async Task<IActionResult> Delete(int? id = 0)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var customer = await _context.Customers
-                .FirstOrDefaultAsync(m => m.CustomerId == id);
+            var customer = await _repository.FindCustomerById(id);
             if (customer == null)
             {
                 return NotFound();
@@ -137,17 +161,32 @@ namespace proj1_OnlineStore.Controllers
         // POST: Customers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int? id)
         {
-            var customer = await _context.Customers.FindAsync(id);
-            _context.Customers.Remove(customer);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                Customer customer = await _repository.FindCustomerById(id);
+                await _repository.Delete(customer);
+                _repository.Save();
+            }
+            catch(Exception e)
+            {
+                _logger.LogInformation($"Could not delete {id}. Error: {e.Message}");
+                return RedirectToAction("Index");
+            }
+           
+            return RedirectToAction("Index");
         }
 
-        private bool CustomerExists(int id)
+        private async Task<bool> CustomerExists(int id)
         {
-            return _context.Customers.Any(e => e.CustomerId == id);
+            return await _repository.CustomerExists(id);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            _repository.Dispose();
+            base.Dispose(disposing);
         }
     }
 }

@@ -1,15 +1,21 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using proj1_OnlineStore.Data;
+using proj1_OnlineStore.Data.Repository;
+using proj1_OnlineStore.Models;
 
 namespace proj1_OnlineStore
 {
@@ -27,9 +33,37 @@ namespace proj1_OnlineStore
 		{
 			services.AddControllersWithViews();
 			//services.AddRazorPages().AddRazorRuntimeCompilation();
+			services.AddRazorPages();
 
 			services.AddDbContext<OnlineStoreDbContext>(options => options
 			.UseSqlServer(Configuration.GetConnectionString("OnlineStoreDbContext")));
+			
+			//  Add Logging
+			services.AddLogging(logger =>
+			{
+				Host.CreateDefaultBuilder()
+				.ConfigureLogging(logging =>
+				{
+					logging.ClearProviders();
+					logging.AddConsole();
+				});
+			});
+
+			//  Add Repositories
+			services.AddScoped<ICustomerRepository<Customer>, CustomerRepository>();
+			services.AddScoped<ILocationRepository<Location>, LocationRepository>();
+			services.AddScoped<IOrderRepository<Order>, OrderRepository>();
+			services.AddScoped<IProductRepository<Product>, ProductRepository>();
+			/*services.AddControllers(config =>
+			{
+				//  using Microsoft.AspNetCore.Mvc.Authorization;
+				//  using Microsoft.AspNetCore.Authorization;
+				var policy = new AuthorizationPolicyBuilder()
+											.RequireAuthenticatedUser()
+											.Build();
+
+				config.Filters.Add(new AuthorizationFilter(policy));
+			});*/
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,6 +84,7 @@ namespace proj1_OnlineStore
 
 			app.UseRouting();
 
+			app.UseAuthentication();
 			app.UseAuthorization();
 
 			app.UseEndpoints(endpoints =>
