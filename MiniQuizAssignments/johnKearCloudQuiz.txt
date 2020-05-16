@@ -1,1 +1,31 @@
 Cloud Quiz
+
+1) A common business scenario of IaaS is
+	- Small data analysis
+	- (Correct)Web applications
+	- Analytics or business intelligence
+	- Customer Relationship Management
+	
+2) Having pre-coded application components, such as workflow, search etc., is an adavantage of which Cloud computing service
+	- IaaS
+	- SaaS
+	- (Correct)PaaS
+	- Serverless
+	
+3) This cloud computing term refers to the ability to quickly expand or decrease computer processing, memory, and storage resources andis typically controlled by system monitoring tools.
+	- (Correct) elastic computing or cloud elasticity
+	- cloud computing
+	- virtualization
+	- cloud bursting
+	
+4) Serverless computing means
+	- Servers are not needed to run the code
+	- Tasks associated with infrastructure provisioning and management are handled by the developer
+	- Tasks associated with infrastructure provisioning and management are invisible to the developer
+	- Tasks associated with infrastructure provisioning and management are visible to the developer
+
+5) This cloud computing term refers to dividing a large database into smaller databases
+	- computer grids
+	- elastic computing
+	- virtualization
+	- (Correct)database sharding
