@@ -34,7 +34,7 @@ namespace proj1_OnlineStore.Models
 		#endregion
 
 		#region Constructors
-		public Order() { this.Timestamp = DateTime.Now.ToString(); }
+		public Order() { }
 		#endregion
 	}
 }

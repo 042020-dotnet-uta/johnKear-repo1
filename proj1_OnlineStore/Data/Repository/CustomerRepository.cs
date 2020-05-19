@@ -98,7 +98,7 @@ namespace proj1_OnlineStore.Data.Repository
 			}
 			return exists;
 		}
-		
+
 		public async Task<IEnumerable<Customer>> GetCustomers()
 		{
 			return await _context.Customers.ToListAsync();
@@ -124,7 +124,7 @@ namespace proj1_OnlineStore.Data.Repository
 			}
 			return exists;
 		}
-		
+
 		/// <summary>
 		/// implements the IDisposable
 		/// </summary>
@@ -134,7 +134,7 @@ namespace proj1_OnlineStore.Data.Repository
 		{
 			if (!this.disposed)
 			{
-				if(disposing)
+				if (disposing)
 				{
 					_context.Dispose();
 				}
@@ -146,6 +146,6 @@ namespace proj1_OnlineStore.Data.Repository
 		{
 			Dispose(true);
 			GC.SuppressFinalize(this);
-		}		
+		}
 	}
 }

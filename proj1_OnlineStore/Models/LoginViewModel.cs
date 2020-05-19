@@ -23,5 +23,6 @@ namespace proj1_OnlineStore.Models
 		[Required(ErrorMessage ="Password is required")]
 		public string Password { get; set; }
 
+		public string ReturnUrl { get; set; }
 	}
 }

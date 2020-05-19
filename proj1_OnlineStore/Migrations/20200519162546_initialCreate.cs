@@ -25,6 +25,23 @@ namespace proj1_OnlineStore.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "LineItems",
+                columns: table => new
+                {
+                    OrderDetailsId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OrderId = table.Column<int>(nullable: false),
+                    ProductId = table.Column<int>(nullable: false),
+                    ProductName = table.Column<string>(nullable: true),
+                    UnitPrice = table.Column<decimal>(nullable: false),
+                    Qty = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LineItems", x => x.OrderDetailsId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Locations",
                 columns: table => new
                 {
@@ -35,21 +52,6 @@ namespace proj1_OnlineStore.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Locations", x => x.LocationId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "OrderDetails",
-                columns: table => new
-                {
-                    OrderDetailsId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    OrderId = table.Column<int>(nullable: false),
-                    ProductId = table.Column<int>(nullable: false),
-                    Qty = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OrderDetails", x => x.OrderDetailsId);
                 });
 
             migrationBuilder.CreateTable(
@@ -97,10 +99,10 @@ namespace proj1_OnlineStore.Migrations
                 name: "Customers");
 
             migrationBuilder.DropTable(
-                name: "Locations");
+                name: "LineItems");
 
             migrationBuilder.DropTable(
-                name: "OrderDetails");
+                name: "Locations");
 
             migrationBuilder.DropTable(
                 name: "Orders");

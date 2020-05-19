@@ -12,8 +12,8 @@ namespace proj1_OnlineStore.Data
 		public DbSet<Customer> Customers { get; set; }
 		public DbSet<Location> Locations { get; set; }
 		public DbSet<Order> Orders { get; set; }
-		public DbSet<OrderLineItem> OrderDetails { get; set; }
-		public DbSet<Product> Products { get; set; }		
+		public DbSet<OrderLineItem> LineItems { get; set; }
+		public DbSet<Product> Products { get; set; }
 
 		public OnlineStoreDbContext() { }
 

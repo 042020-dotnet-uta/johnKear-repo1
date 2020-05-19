@@ -8,13 +8,16 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Logging;
 using proj1_OnlineStore.Data;
 using proj1_OnlineStore.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace proj1_OnlineStore.Controllers
 {
+    [AllowAnonymous]
     public class LoginController : Controller
     {
         private ILogger<LoginController> _logger;
@@ -24,8 +27,7 @@ namespace proj1_OnlineStore.Controllers
         public LoginController(
             OnlineStoreDbContext context,
             ILogger<LoginController> logger,
-            ICustomerRepository<Customer> customerRepository
-            )
+            ICustomerRepository<Customer> customerRepository)
         {
             this._logger = logger;
             this._context = context;
@@ -33,7 +35,6 @@ namespace proj1_OnlineStore.Controllers
         }
 
        [Route("Login")]
-        [AllowAnonymous]
         public IActionResult Login()
         {
             var model = new LoginViewModel();
@@ -43,9 +44,9 @@ namespace proj1_OnlineStore.Controllers
         [Route("Login")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AllowAnonymous]
-        public async Task<IActionResult> Login([Bind]Models.LoginViewModel model)
+        public async Task<IActionResult> Login(LoginViewModel model)
         {
+            
             if (!ModelState.IsValid)
             {
                 _logger.LogInformation("invalid login model");
@@ -56,15 +57,39 @@ namespace proj1_OnlineStore.Controllers
                 var customer = await _customerRepository.GetCustomerByLogin(model.UserName);
                 if (customer != null)
                 {
-                    var claims = new List<Claim> { new Claim(ClaimTypes.Name, Guid.NewGuid().ToString()) };
-                    var claimsIdentity = new ClaimsIdentity(
-                        claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                    var authProperties = new AuthenticationProperties();
-                    await HttpContext.SignInAsync(
-                        CookieAuthenticationDefaults.AuthenticationScheme,
-                        new ClaimsPrincipal(claimsIdentity),
-                        authProperties);
-                    Response.Redirect("/Home/Index/"); //  return to home after success
+                    if (customer.Login == model.UserName && customer.Password == model.Password)
+                    {
+                        var claims = new List<Claim> { 
+                            new Claim("UserName", customer.Login),
+                            new Claim(ClaimTypes.Name, Guid.NewGuid().ToString()),
+                            new Claim("UserId", customer.CustomerId.ToString())
+                        };
+                        var claimsIdentity = new ClaimsIdentity(
+                            claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                        var authProperties = new AuthenticationProperties();
+
+                        await HttpContext.SignInAsync(
+                            CookieAuthenticationDefaults.AuthenticationScheme,
+                            new ClaimsPrincipal(claimsIdentity),
+                            authProperties);
+              
+                        if (!string.IsNullOrEmpty(model.ReturnUrl))
+                        {
+                            return Redirect(model.ReturnUrl);
+                        }
+                        else
+                        {
+                            return Redirect("/Home/Index/"); //  return to home after success
+                        }
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("User", "Password does not match user name.");
+                        _logger.LogInformation("Could not login, no user exists");
+                        return View(model);
+                    }
+
                 }
                 else
                 {
@@ -72,11 +97,21 @@ namespace proj1_OnlineStore.Controllers
                     _logger.LogInformation("Could not login, no user exists");
                     return View(model);
                 }
+
             }
             return View();
         }
 
-        [AllowAnonymous]
+        public async Task<IActionResult> Logout()
+        {
+            if(HttpContext.User == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("Index", "Home");
+        }
+
         public void Test()
         {
             //  return to home after success
