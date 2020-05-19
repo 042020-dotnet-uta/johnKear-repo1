@@ -1,4 +1,5 @@
-﻿using proj1_OnlineStore.Models;
+﻿using proj1_OnlineStore.Data.Repository;
+using proj1_OnlineStore.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace proj1_OnlineStore.Data
 
 	public interface ICustomerRepository<T> : IDisposable
 	{
-		Task<IEnumerable<Customer>>FindCustomerByFirstName(string fname);
+		Task<IEnumerable<Customer>> FindCustomerByFirstName(string fname);
 		Task<IEnumerable<Customer>> FindCustomerByLastname(string lname);
 		Task<IEnumerable<Customer>> FindCustomerByFullname(string name);
 		Task<IEnumerable<Order>> GetOrderHistory(Customer customer);
@@ -32,24 +33,28 @@ namespace proj1_OnlineStore.Data
 		void Save();
 	}
 
-	public interface ILocationRepository<T>
+	public interface ILocationRepository<T> : IDisposable
 	{
 		Task<T> GetLocations();
-		Task<T> GetInventory(Location location);
+		Task<IEnumerable<Product>> GetInventory(Location location);
+		Task<Product> GetProduct(int productId, Location location);
 	}
 	
-	public interface IOrderRepository<T>
+	public interface IOrderRepository<T> : IDisposable
 	{
 		Task<IEnumerable<Order>> GetOrderHistory(Customer customer);
 		Task<IEnumerable<OrderLineItem>> GetLineItems(Order order);
 		Task<T> SetLineItemQuantity(OrderLineItem lineItem, int newQuantity);
 		Task<T> RemoveLineItem(OrderLineItem lineItem);
+		Task<AddLineItemResult> AddLineItem(int customerId, Order order, Product product, int quantity);
 	}
 
-	public interface IProductRepository<T>
+	public interface IProductRepository<T> : IDisposable
 	{
 		Task<T> GetProductById(int id);
 		Task<IEnumerable<Product>> GetProductsByLocation(Location location);
+		
 	}
 
+	
 }

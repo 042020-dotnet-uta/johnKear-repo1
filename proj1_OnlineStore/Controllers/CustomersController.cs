@@ -13,6 +13,7 @@ using proj1_OnlineStore.Models;
 
 namespace proj1_OnlineStore.Controllers
 {
+    [Authorize]
     public class CustomersController : Controller
     {
         private readonly ILogger<Customer> _logger;
@@ -56,13 +57,14 @@ namespace proj1_OnlineStore.Controllers
         }
         // GET: Customers/Details/5
         [Route("LastName")]
-        public  ViewResult GetByLast(string lname)
+        public ViewResult GetByLast(string lname)
         {
-            var customer =  _repository.FindCustomerByLastname(lname);
+            var customer = _repository.FindCustomerByLastname(lname);
             return View(customer);
         }
 
         // GET: Customers/Create
+        [AllowAnonymous]
         public IActionResult Create()
         {
             return View();
@@ -75,14 +77,14 @@ namespace proj1_OnlineStore.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CustomerId,Login,Password,FirstName,LastName,PhoneNumber,DefaultLocation")] Customer customer)
         {
-            
+
             if (ModelState.IsValid)
             {
-               await _repository.Add(customer);
+                await _repository.Add(customer);
                 _repository.Save();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Login");
             }
-          
+
             return View(customer);
         }
 
@@ -135,13 +137,12 @@ namespace proj1_OnlineStore.Controllers
                         _logger.LogInformation($"Could not update {customer}. Error: {e.Message}");
                         ModelState.AddModelError(string.Empty, "Unable to save changes. Try again.");
                     }
-                }                
+                }
             }
             return View(customer);
         }
 
         // GET: Customers/Delete/5
-        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> Delete(int? id = 0)
         {
             if (id == null)
@@ -169,12 +170,12 @@ namespace proj1_OnlineStore.Controllers
                 await _repository.Delete(customer);
                 _repository.Save();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 _logger.LogInformation($"Could not delete {id}. Error: {e.Message}");
                 return RedirectToAction("Index");
             }
-           
+
             return RedirectToAction("Index");
         }
 

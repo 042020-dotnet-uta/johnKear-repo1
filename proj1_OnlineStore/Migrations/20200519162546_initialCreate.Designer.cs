@@ -9,7 +9,7 @@ using proj1_OnlineStore.Data;
 namespace proj1_OnlineStore.Migrations
 {
     [DbContext(typeof(OnlineStoreDbContext))]
-    [Migration("20200515213602_initialCreate")]
+    [Migration("20200519162546_initialCreate")]
     partial class initialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -114,12 +114,18 @@ namespace proj1_OnlineStore.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
+                    b.Property<string>("ProductName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Qty")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("decimal(18,2)");
+
                     b.HasKey("OrderDetailsId");
 
-                    b.ToTable("OrderDetails");
+                    b.ToTable("LineItems");
                 });
 
             modelBuilder.Entity("proj1_OnlineStore.Models.Product", b =>

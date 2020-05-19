@@ -1,0 +1,31 @@
+SOA quiz
+
+1. Service-oriented applications are
+	-composed largely of services, which are unordered
+	-composed largely of consumers, which are unordered
+	-(Correct)composed largely of services, wich are hierarchical
+	-composed largely of consumers, which are hierarchical
+
+2. The elements of a service include
+	-service provider, service point, consumers
+	-service provider, service implementation, endpoint
+	-service implementation, elementary access details, endpoint
+	-(Correct)service implementation, elementary access details, contract
+
+3. Which of the Following is a REST service operation/method?
+	-(Correct)Push
+	-Query
+	-Pull
+	-Include
+
+4. Which of the following is a benfit of using binary-exchange service
+	-Needs to maintain configuration files
+	-(Correct)Faster runtime response than web services
+	-Human readable transmission of data
+	-Faster learning of technologies related to traditional web services
+
+5. The Proxy design pattern
+	-converts the interface of an existing class to an interface the client expects
+	-is part of the MVC architecture and creates a universal interface for legacy services
+	-(Correct)Can serve as a standardized interface for a collection of logacy back-end services
+	-promotes encapsulation of lower-level services to provide a single higher-level function

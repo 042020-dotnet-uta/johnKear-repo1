@@ -63,7 +63,6 @@ namespace proj1_OnlineStore.Models
 		public string PhoneNumber { get; set; }
 
 		[ForeignKey("LocationId")]
-		[AllowNull]
 		public int DefaultLocation { get; set; }
 		#endregion
 
