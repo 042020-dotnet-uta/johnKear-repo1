@@ -1,0 +1,49 @@
+﻿@model proj1_OnlineStore.Models.OrderHistoryViewModel
+@{
+	ViewData["Title"] = "OrderHistory";
+}
+	<form asp-controller="Account" asp-action="Details" method="get">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>
+						@Html.DisplayNameFor(model => model.Orders[0].OrderId)
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.Orders[0].LocationId)
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.Orders[0].Timestamp)
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.Orders[0].OrderTotal)
+					</th>
+				</tr>
+			</thead>
+
+			<tbody>
+
+				@foreach (var item in Model.Orders)
+				{
+					<tr>
+						<td>
+							@Html.DisplayFor(modelItem => item.OrderId)
+						</td>
+						<td>
+							@Html.DisplayFor(modelItem => item.LocationId)
+						</td>
+						<td>
+							@Html.DisplayFor(modelItem => item.Timestamp)
+						</td>
+						<td>
+							@Html.DisplayFor(modelItem => item.OrderTotal)
+						</td>
+						<td>
+							<input type="hidden" name="orderId" value="@item.OrderId" />
+							<input style="background-color:darkorange;border-width:medium;border-color:black;color:black" type="submit" value="Details" />
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</form>

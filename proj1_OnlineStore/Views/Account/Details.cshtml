@@ -1,0 +1,40 @@
+﻿@model proj1_OnlineStore.Models.OrderDetailsViewModel
+@{
+	ViewData["Title"] = "OrderHistory";
+}
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.LineItems[0].ProductName)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.LineItems[0].Qty)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.LineItems[0].UnitPrice)
+			</th>
+		</tr>
+	</thead>
+
+	<tbody>
+
+		@foreach (var item in Model.LineItems)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.ProductName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Qty)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.UnitPrice)
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+<a asp-controller="Account" asp-action="Account"
+   style="background-color:darkorange;border-width:medium;border-color:black;color:black;float:right">Account</a>

@@ -191,12 +191,6 @@ namespace proj1_OnlineStore.Controllers
             base.Dispose(disposing);
         }
 
-        [Authorize]
-        public IActionResult Account()
-		{
-            string userName = HttpContext.User.FindFirst(claim => claim.Type == "UserName").Value;
-            var accountVM = new AccountViewModel { UserName = userName };
-            return View(accountVM);
-		}
+       
     }
 }

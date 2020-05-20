@@ -48,6 +48,11 @@ namespace proj1_OnlineStore.Data.Repository
 
 		}
 
+		public async Task<Order> GetOrder(int orderId)
+		{
+			return await _context.Orders.Where(o => o.OrderId == orderId).Select(o => o).FirstOrDefaultAsync();
+		}
+
 		public async Task<bool> AddLineItem(int customerId, Order order, Product product, int quantity)
 		{
 			bool success = true;
@@ -76,9 +81,10 @@ namespace proj1_OnlineStore.Data.Repository
 			
 		}
 
-		public Task<IEnumerable<Order>> GetOrderHistory(Customer customer)
+		public async Task<IEnumerable<Order>> GetOrderHistory(int customerId)
 		{
-			throw new NotImplementedException();
+			var orders = await _context.Orders.Where(c => c.CustomerId == customerId).Select(c => c).ToListAsync();
+			return orders;
 		}
 
 		public Task<Order> RemoveLineItem(OrderLineItem lineItem)

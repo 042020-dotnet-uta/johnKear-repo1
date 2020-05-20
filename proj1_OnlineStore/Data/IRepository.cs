@@ -44,7 +44,8 @@ namespace proj1_OnlineStore.Data
 	
 	public interface IOrderRepository<T> : IDisposable
 	{
-		Task<IEnumerable<Order>> GetOrderHistory(Customer customer);
+		Task<Order> GetOrder(int orderId);
+		Task<IEnumerable<Order>> GetOrderHistory(int customerId);
 		Task<IEnumerable<OrderLineItem>> GetLineItems(Order order);
 		Task<T> SetLineItemQuantity(OrderLineItem lineItem, int newQuantity);
 		Task<T> RemoveLineItem(OrderLineItem lineItem);

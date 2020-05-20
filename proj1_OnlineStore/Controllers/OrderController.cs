@@ -135,14 +135,22 @@ namespace proj1_OnlineStore.Controllers
 				}*/
 			}
 
-			
+			//  calculate cost
 			double orderCost = 0;
-			
+			index = 0;
+			foreach (var item in order.Products)
+			{
+				Product product = await _productRepository.GetProductById(item);
+				//  calculate order total
+				orderCost += (product.UnitPrice * order.OrderQuantities[index]);
+				index++;
+			}
+
 			int locId = order.LocationIds[0];
 			int userId = int.Parse(HttpContext.User.FindFirst(claim => claim.Type == "UserId").Value);
 			//  Create new order and get order id
 			_logger.LogInformation("Attempting to create new order for user: {0}, at time: {1}",userId, DateTime.Now);
-			var newOrder = await _orderRepository.AddOrder(userId, locId, totalItems);
+			var newOrder = await _orderRepository.AddOrder(userId, locId, orderCost);
 			index = 0;
 			//  Create line items
 			List<OrderLineItem> lineItems = new List<OrderLineItem>();
@@ -150,8 +158,6 @@ namespace proj1_OnlineStore.Controllers
 			{
 				Product product = await _productRepository.GetProductById(item);
 				await _orderRepository.AddLineItem(userId, newOrder, product, order.OrderQuantities[index]);
-				//  calculate order total
-				orderCost += (product.UnitPrice * order.OrderQuantities[index]);
 				index++;
 			}
 
