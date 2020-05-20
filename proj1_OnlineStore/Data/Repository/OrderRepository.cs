@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using proj1_OnlineStore.Models;
 using System;
 using System.Collections.Generic;
@@ -14,54 +15,58 @@ namespace proj1_OnlineStore.Data.Repository
 		InvalidProduct,
 		InvalidOrder
 	}
+
 	public class OrderRepository : IOrderRepository<Order>, IDisposable
 	{
 
-		private OnlineStoreDbContext _context;
+		private readonly OnlineStoreDbContext _context;
+		private readonly ILogger<Order> _logger;
+		private readonly IProductRepository<Product> _productRepository;
 
-		public OrderRepository(OnlineStoreDbContext context)
+		public OrderRepository(OnlineStoreDbContext context, ILogger<Order> logger, IProductRepository<Product> productRepository)
 		{
 			this._context = context;
+			this._logger = logger;
+			this._productRepository = productRepository;
 		}
 
-		public async Task<AddLineItemResult> AddLineItem(int customerId, Order order, Product product, int quantity)
+		public async Task<Order> AddOrder(int customerId, int locationId, double orderTotal)
 		{
-			if (order == null) return AddLineItemResult.InvalidOrder;
-			if (product == null) return AddLineItemResult.InvalidProduct;
-
-			var inStock = await _context.Products.Where(p => p.ProductId == product.ProductId).Where(l => l.LocationId == order.LocationId)
-																																				.SumAsync(q => q.Qty);
-
-			if (quantity > inStock) return AddLineItemResult.ExceedsStock;
-
-			var currLineItem = await _context.LineItems.Where(o => o.ProductId == product.ProductId)
-																					.Where(o => o.OrderId == order.OrderId)
-																					.Select(o => o)
-																					.SingleOrDefaultAsync();
-
-			if(currLineItem == null)
+			_logger.LogInformation("Creating new order for customer: {0}", customerId);
+			var newOrder = new Order
 			{
-				var newLine = new OrderLineItem
-				{
-					OrderId = order.OrderId,
-					ProductId = product.ProductId,
-					Qty = quantity,
-					UnitPrice = product.UnitPrice,
-					ProductName = product.ProductName
-				};
-				_context.Add(newLine);
-			}
-			else
-			{
-				currLineItem.Qty += quantity;
-				if (currLineItem.Qty > inStock)
-				{
-					return AddLineItemResult.ExceedsStock;
-				}
-			}
+				CustomerId = customerId,
+				LocationId = locationId,
+				OrderTotal = orderTotal,
+				Timestamp = DateTime.Now
+			};
+			_context.Orders.Add(newOrder);
 
 			await _context.SaveChangesAsync();
-			return AddLineItemResult.Success;																					
+			var order = await _context.Orders.Where(o => o.Timestamp == newOrder.Timestamp && o.CustomerId == newOrder.CustomerId).FirstOrDefaultAsync();
+			return order;
+
+		}
+
+		public async Task<bool> AddLineItem(int customerId, Order order, Product product, int quantity)
+		{
+			bool success = true;
+			var lineItem = new OrderLineItem
+			{
+				OrderId = order.OrderId,
+				ProductId = product.ProductId,
+				ProductName = product.ProductName,
+				Qty = quantity,
+				UnitPrice = product.UnitPrice
+			};
+
+			await _context.LineItems.AddAsync(lineItem);
+
+			await _productRepository.DecrementOnLineCreate(order.LocationId, lineItem);
+
+			await _context.SaveChangesAsync();
+
+			return success;
 		}
 
 		public async Task<IEnumerable<OrderLineItem>> GetLineItems(Order order)

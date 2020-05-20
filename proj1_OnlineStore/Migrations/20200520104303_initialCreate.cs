@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace proj1_OnlineStore.Migrations
 {
@@ -32,8 +33,8 @@ namespace proj1_OnlineStore.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     OrderId = table.Column<int>(nullable: false),
                     ProductId = table.Column<int>(nullable: false),
-                    ProductName = table.Column<string>(nullable: true),
-                    UnitPrice = table.Column<decimal>(nullable: false),
+                    ProductName = table.Column<string>(nullable: false),
+                    UnitPrice = table.Column<double>(nullable: false),
                     Qty = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -62,8 +63,8 @@ namespace proj1_OnlineStore.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CustomerId = table.Column<int>(nullable: false),
                     LocationId = table.Column<int>(nullable: false),
-                    Timestamp = table.Column<string>(nullable: false),
-                    OrderTotal = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    Timestamp = table.Column<DateTime>(nullable: false),
+                    OrderTotal = table.Column<double>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -78,7 +79,7 @@ namespace proj1_OnlineStore.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     LocationId = table.Column<int>(nullable: false),
                     ProductName = table.Column<string>(nullable: false),
-                    UnitPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    UnitPrice = table.Column<double>(nullable: false),
                     Qty = table.Column<int>(nullable: false)
                 },
                 constraints: table =>

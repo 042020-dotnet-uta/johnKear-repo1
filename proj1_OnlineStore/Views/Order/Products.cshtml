@@ -1,55 +1,61 @@
 ﻿@model proj1_OnlineStore.Models.ProductsViewModel
-
 @{
 	ViewData["Title"] = "View";
 	Layout = "~/Views/Shared/_Layout.cshtml";
-} 
+}
 
 <h1>Products</h1>
 
 <form asp-controller="Order" asp-action="Products" method="get">
 	<p>
 		<label><strong>Location</strong></label>
-        <select asp-for="Location" asp-items="Model.Locations" name="locationName">
-            <option value="">Select</option>
-        </select>
-  
-    </p>
-	<input type="submit" value="Filter" />
+		<select asp-for="Location" asp-items="Model.Locations" name="locationName">
+			<option value="">Select</option>
+		</select>
+		<input type="submit" value="Search" />
+	</p>
 </form>
 
+<form asp-controller="Order" asp-action="Checkout" method="post">
+	<table class="table">
+		<thead>
+			<tr>
+				<th>
+					@Html.DisplayNameFor(model => model.Products[0].ProductName)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.Products[0].Qty)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.Products[0].UnitPrice)
+				</th>
+				<th></th>
+			</tr>
+		</thead>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Products[0].ProductName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Products[0].Qty)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Products[0].UnitPrice)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.Products) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Qty)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UnitPrice)
-            </td>
-            <td>
-				<input type="number" runat="server" min="0" max="@item.Qty"/>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+		<tbody>
+
+			@foreach (var item in Model.Products)
+			{
+				<tr>
+					<td>
+						@Html.DisplayFor(modelItem => item.ProductName)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Qty)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.UnitPrice)
+					</td>
+					<td>
+						<input type="hidden" name="Products" runat="server" value="@item.ProductId" />
+						<input type="hidden" name="LocationIds" value="@item.LocationId" />
+						<input name="OrderQuantities" type="number" runat="server" min="0" max="@item.Qty" value="0" />
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+	<button asp-controller="Order" asp-action="Checkout" style="background-color:orange;float:right" type="submit">Checkout</button>
+</form>
+

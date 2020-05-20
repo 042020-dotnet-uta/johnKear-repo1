@@ -75,6 +75,7 @@ namespace proj1_OnlineStore.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public async Task<IActionResult> Create([Bind("CustomerId,Login,Password,FirstName,LastName,PhoneNumber,DefaultLocation")] Customer customer)
         {
 
@@ -189,5 +190,13 @@ namespace proj1_OnlineStore.Controllers
             _repository.Dispose();
             base.Dispose(disposing);
         }
+
+        [Authorize]
+        public IActionResult Account()
+		{
+            string userName = HttpContext.User.FindFirst(claim => claim.Type == "UserName").Value;
+            var accountVM = new AccountViewModel { UserName = userName };
+            return View(accountVM);
+		}
     }
 }

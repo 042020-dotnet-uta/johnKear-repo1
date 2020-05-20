@@ -22,9 +22,12 @@ namespace proj1_OnlineStore.Models
 		[ForeignKey("ProductId")]
 		public int ProductId { get; set; }
 
+		[Required]
 		public string ProductName { get; set; }
 
-		public decimal UnitPrice { get; set; }
+		[Required]
+		[DataType(DataType.Currency)]
+		public double UnitPrice { get; set; }
 
 		[DisplayName("Quantity")]
 		[Required]		

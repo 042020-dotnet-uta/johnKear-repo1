@@ -20,9 +20,9 @@ namespace proj1_OnlineStore.Controllers
     [AllowAnonymous]
     public class LoginController : Controller
     {
-        private ILogger<LoginController> _logger;
-        private OnlineStoreDbContext _context;
-        private ICustomerRepository<Customer> _customerRepository;
+        private readonly ILogger<LoginController> _logger;
+        private readonly OnlineStoreDbContext _context;
+        private readonly ICustomerRepository<Customer> _customerRepository;
 
         public LoginController(
             OnlineStoreDbContext context,

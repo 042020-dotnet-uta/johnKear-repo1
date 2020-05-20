@@ -24,13 +24,12 @@ namespace proj1_OnlineStore.Models
 
 		[DataType(DataType.DateTime, ErrorMessage = "Invalid date format")]
 		[Required]
-		public string Timestamp { get; set; }
+		public DateTime Timestamp { get; set; }
 
 		[Required]
 		[DisplayName("Order Total")]
 		[DataType(DataType.Currency)]
-		[Column(TypeName = "decimal(18,2)")]
-		public decimal OrderTotal { get; set; }
+		public double OrderTotal { get; set; }
 		#endregion
 
 		#region Constructors

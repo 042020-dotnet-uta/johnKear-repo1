@@ -9,7 +9,7 @@ namespace proj1_OnlineStore.Data.Repository
 {
 	public class LocationRepository : ILocationRepository<Location>, IDisposable 
 	{
-		private OnlineStoreDbContext _context;
+		private readonly OnlineStoreDbContext _context;
 
 		public LocationRepository(OnlineStoreDbContext context)
 		{
@@ -39,6 +39,11 @@ namespace proj1_OnlineStore.Data.Repository
 																.Where(p => p.ProductId == productId)
 																.FirstOrDefaultAsync();
 			return product;
+		}
+
+		public async Task<string> GetLocationName(int locationId)
+		{
+			return await _context.Locations.Where(l => l.LocationId == locationId).Select(n => n.LocationName).FirstOrDefaultAsync();
 		}
 
 		/// <summary>
