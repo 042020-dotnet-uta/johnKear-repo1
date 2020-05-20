@@ -35,6 +35,10 @@ namespace proj1_OnlineStore.Controllers
 			return View(accountVM);
 		}
 
+		/// <summary>
+		/// Get and display the order overview
+		/// </summary>
+		/// <returns></returns>
 		public async Task<IActionResult> OrderHistory()
 		{
 			int userId = int.Parse(HttpContext.User.FindFirst(claim => claim.Type == "UserId").Value);
@@ -46,6 +50,11 @@ namespace proj1_OnlineStore.Controllers
 			return View(historyVM);
 		}
 
+		/// <summary>
+		/// Display the details of an order
+		/// </summary>
+		/// <param name="orderId"></param>
+		/// <returns></returns>
 		// GET: Locations/Details/5
 		[HttpGet]
 		public async Task<IActionResult> Details(int orderId)

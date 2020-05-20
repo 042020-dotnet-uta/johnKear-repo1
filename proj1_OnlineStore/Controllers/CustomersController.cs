@@ -105,9 +105,12 @@ namespace proj1_OnlineStore.Controllers
             return View(customer);
         }
 
-        // POST: Customers/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        /// Edit a customers values
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="customer"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
@@ -143,7 +146,11 @@ namespace proj1_OnlineStore.Controllers
             return View(customer);
         }
 
-        // GET: Customers/Delete/5
+        /// <summary>
+        /// Delete a customer
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Delete(int? id = 0)
         {
             if (id == null)

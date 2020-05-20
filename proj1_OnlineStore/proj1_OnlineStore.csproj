@@ -22,7 +22,24 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Images\" />
+    <Folder Include="wwwroot\Images\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\Images\20200509_143903.jpg" />
+    <None Include="wwwroot\Images\20200509_143915.jpg" />
+    <None Include="wwwroot\Images\20200509_143920.jpg" />
+    <None Include="wwwroot\Images\20200509_143930.jpg" />
+    <None Include="wwwroot\Images\20200509_143933.jpg" />
+    <None Include="wwwroot\Images\20200509_143939.jpg" />
+    <None Include="wwwroot\Images\20200509_143942.jpg" />
+    <None Include="wwwroot\Images\20200509_144008.jpg" />
+    <None Include="wwwroot\Images\20200509_144032.jpg" />
+    <None Include="wwwroot\Images\20200509_144103.jpg" />
+    <None Include="wwwroot\Images\20200509_144134.jpg" />
+    <None Include="wwwroot\Images\20200509_144157.jpg" />
+    <None Include="wwwroot\Images\yarn.jpg" />
+    <None Include="wwwroot\yarn.png" />
   </ItemGroup>
 
 </Project>
