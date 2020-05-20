@@ -35,6 +35,7 @@ namespace proj1_OnlineStore.Data
 
 	public interface ILocationRepository<T> : IDisposable
 	{
+		Task<string> GetLocationName(int locationId);
 		Task<IEnumerable<Location>> GetLocations();
 		Task<IEnumerable<Product>> GetInventory(Location location);
 		Task<IQueryable<string>> GetQueryLocations();
@@ -47,13 +48,15 @@ namespace proj1_OnlineStore.Data
 		Task<IEnumerable<OrderLineItem>> GetLineItems(Order order);
 		Task<T> SetLineItemQuantity(OrderLineItem lineItem, int newQuantity);
 		Task<T> RemoveLineItem(OrderLineItem lineItem);
-		Task<AddLineItemResult> AddLineItem(int customerId, Order order, Product product, int quantity);
+		Task<bool> AddLineItem(int customerId, Order order, Product product, int quantity);
+		Task<Order> AddOrder(int customerId, int locationId, double orderTotal);
 	}
 
 	public interface IProductRepository<T> : IDisposable
 	{
 		Task<T> GetProductById(int id);
 		Task<IEnumerable<Product>> GetProductsByLocation(Location location);
+		Task<bool> DecrementOnLineCreate(int locationId, OrderLineItem lineItem);
 		
 	}
 

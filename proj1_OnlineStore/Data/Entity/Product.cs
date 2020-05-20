@@ -26,8 +26,7 @@ namespace proj1_OnlineStore.Models
 
 		[Required]
 		[DataType(DataType.Currency)]
-		[Column(TypeName = "decimal(18,2)")]
-		public decimal UnitPrice { get; set; }
+		public double UnitPrice { get; set; }
 
 		/// <summary>
 		/// Quantity should never be less than 0

@@ -1,0 +1,65 @@
+﻿@model proj1_OnlineStore.Models.CompletedOrder
+@{
+	ViewData["Title"] = "View";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h1><strong>Your Order</strong></h1>
+<h4>Thank You for shopping with Hooks and Yarn!</h4>
+
+	<table class="table">
+		<tbody>
+			<tr>
+				<td>
+					<label>Location: </label>
+					@Model.Location
+				</td>	
+				<td>
+					<label>Date: </label>
+					@Model.Date
+				</td>
+				<td>
+					<label>Total Cost: $</label>
+					@Model.Total
+				</td>
+			</tr>			
+		</tbody>
+	</table>
+	<h3>Details</h3>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>
+					
+					@Html.DisplayNameFor(model => model.OrderLineItems[0].ProductName)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.OrderLineItems[0].Qty)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.OrderLineItems[0].UnitPrice)
+				</th>
+				<th></th>
+			</tr>
+		</thead>
+
+		<tbody>
+
+			@foreach (var item in Model.OrderLineItems)
+			{
+				<tr>
+					<td>
+						@Html.DisplayFor(modelItem => item.ProductName)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Qty)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.UnitPrice)
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+	<a asp-controller="Order" asp-action="Products" style="background-color:orange;float:right">Products</a>
+
+	
