@@ -9,6 +9,7 @@
 
 <form asp-controller="Order" asp-action="Products" method="get">
 	<p>
+		<label><strong>Location</strong></label>
         <select asp-for="Location" asp-items="Model.Locations" name="locationName">
             <option value="">Select</option>
         </select>
@@ -40,10 +41,10 @@
                 @Html.DisplayFor(modelItem => item.ProductName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.UnitPrice)
+                @Html.DisplayFor(modelItem => item.Qty)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Qty)
+                @Html.DisplayFor(modelItem => item.UnitPrice)
             </td>
             <td>
 				<input type="number" runat="server" min="0" max="@item.Qty"/>
