@@ -22,9 +22,15 @@ namespace proj1_OnlineStore.Data.Repository
 			return inventory;
 		}
 
-		public Task<Location> GetLocations()
+		public async Task<IEnumerable<Location>> GetLocations()
 		{
-			throw new NotImplementedException();
+			return await _context.Locations.Select(c=>c).ToListAsync();
+		}
+
+		public Task<IQueryable<string>> GetQueryLocations()
+		{
+			IQueryable<string> locations = from loc in _context.Locations orderby loc.LocationName select loc.LocationName;
+			return (Task<IQueryable<string>>)locations;
 		}
 
 		public async Task<Product> GetProduct(int productId, Location location)
