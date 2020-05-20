@@ -35,8 +35,9 @@ namespace proj1_OnlineStore.Data
 
 	public interface ILocationRepository<T> : IDisposable
 	{
-		Task<T> GetLocations();
+		Task<IEnumerable<Location>> GetLocations();
 		Task<IEnumerable<Product>> GetInventory(Location location);
+		Task<IQueryable<string>> GetQueryLocations();
 		Task<Product> GetProduct(int productId, Location location);
 	}
 	
