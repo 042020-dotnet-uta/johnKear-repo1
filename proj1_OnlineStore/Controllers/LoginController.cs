@@ -80,7 +80,7 @@ namespace proj1_OnlineStore.Controllers
                         }
                         else
                         {
-                            return Redirect("/Home/Index/"); //  return to home after success
+                            return RedirectToAction("Account", "Account"); //  go to account page upon successfull login
                         }
                     }
                     else

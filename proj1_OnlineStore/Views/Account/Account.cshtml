@@ -1,0 +1,21 @@
+﻿@model proj1_OnlineStore.Models.AccountViewModel
+@{
+	ViewData["Title"] = "Account";
+}
+
+	<h1>Welcome @Model.UserName</h1>
+	<h2>This is your account page</h2>
+	<p>Have fun with these tools!</p>
+
+	<div class="text-center">
+		<a class="btn-link" style="border-width:thick; background-color:darkorange;border-color:black;color:black" asp-controller="Account" asp-action="OrderHistory">Orders</a>
+	</div>
+	<div class="text-center">
+		<a class="btn-link" style="border-width:thick; background-color:darkorange;border-color:black;color:black" asp-controller="" asp-action="">Location Orders</a>
+	</div>
+	<div class="text-center">
+		<form asp-controller="" asp-action="" method="post">
+			<input style="border-width:thick" type="text" name="UserName" placeholder="Enter a name" />
+			<input style="background-color:darkorange; border-color:black" type="submit" value="Search" />
+		</form>
+	</div>
