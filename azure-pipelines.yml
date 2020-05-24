@@ -1,0 +1,125 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+# Whenever a change is made to the master branch
+trigger:
+  - master
+
+pr: 'none'
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  sdkVersion: '3.1.x'
+  solutionPath: 'proj1_OnlineStore/proj1_OnlineStore.sln'
+  buildConfiguration: 'Release'
+
+
+stages:
+  - stage: 'build'
+    jobs:
+      - job: 'buildjob'
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+#.NET build this download the corret SDK version for the build
+          - task: UseDotNet@2
+            inputs:
+              packageType: 'sdk'
+              version: '$(sdkVersion)'
+            displayName: 'dot net $(sdkVersion)'
+#.NET publish with arguments for the configuration
+#this will build, create and store an artifact to
+#be retrieved by the deploy stage
+          - task: DotNetCoreCLI@2
+            inputs:
+              command: publish
+              publishWebProjects: true
+              arguments:
+                --configuration $(buildConfiguration)
+                --output $(Build.ArtifactStagingDirectory)/app
+              modifyOutputPath: false
+              zipAfterPublish: false
+            displayName: dotnet publish
+          
+#publish artifact
+          - publish: $(Build.ArtifactStagingDirectory)/app
+            artifact: app
+            displayName: artifact publish app
+
+  - stage: 'sonar cloud'
+    jobs:
+      - job: 'build'
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+
+#configure sonar cloud settings
+          - task: SonarCloudPrepare@1
+            inputs:
+              SonarCloud: 'project1'
+              organization: 'pro'
+              scannerMode: 'MSBuild'
+              projectKey: '5afebd8fc7c6be8448074f35519b3e0c0870fcbc'
+              projectName: 'revproj1'
+              extraProperties: |
+                sonar.exclusions=**/obj/**,**/*.dll
+                sonar.branch.name=$(Build.SourceBranchName)
+                sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
+                sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/*.xml
+
+#build project
+          - script: dotnet build $(solutionPath)
+
+#run tests
+          - task: DotNetCoreCLI@2
+            displayName: 'dotnet testing'
+            inputs:
+              command: 'test'
+              arguments: '--configuration $(BuildConfiguration)
+                /p:CollectCoverage=true 
+                /p:CoverletOutputFormat=opencover 
+                /p:Coverletoutput=$(Build.SourcesDirector)/TestResults/Coverage 
+                --logger trx'
+              projects: '**/*Project1_testing.csproj'
+              nobuild: true
+
+#publishes code coverage in azure devops
+          - task: PublishCodeCoverageResults@1
+            displayName: 'Publish Code Coverage'
+            inputs:
+              codeCoverageTool: Cobertura
+              summaryFileLocation: '$(Build.SorucesDirectory)/**/*.xml'
+              reportDirectory: '$(Build.SourcesDirectory)/CodeCoverage'
+          - task: SonarCloudAnalyze@1
+          - task: SonarCloudPublish@1
+            inputs:
+              pollingTimeoutSec: '300'
+          - script: dotnet publish $(solutionPath)
+
+#deploy to azure services?
+  - stage: 'deploy'
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    dependsOn: build
+  
+    jobs:
+    - deployment: deploy_dev
+      pool:
+        vmImage: ubuntu-latest
+      environment: dev
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+              # - download: current
+              #   artifact: app
+              #   displayName: artifact download app
+              - task: AzureRmWebAppDeployment@4
+                inputs:
+                  ConnectionType: 'AzureRM'
+                  azureSubscription: 'Azure subscription 1(c17f80a1-d2ba-47cf-a8c1-ee16399869dd)'
+                  appType: 'webApp'
+                  WebAppName: proj1_OnlineStore
+                  packageForLinux: '$(Pipeline.Workspace)/app'
