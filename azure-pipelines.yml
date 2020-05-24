@@ -49,7 +49,7 @@ stages:
             artifact: app
             displayName: artifact publish app
 
-  - stage: 'sonar cloud'
+  - stage: 'sonarCloud'
     jobs:
       - job: 'build'
         pool:
